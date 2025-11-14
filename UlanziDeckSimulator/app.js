@@ -7,13 +7,13 @@ import DeckClient from './server/deckClient.js';
 import Clients from './server/clients.js';
 
 
-const serverPort = 39069 ; //模拟器端口
+const serverPort = 39069 ; // porta do simulador
 const app = express();
 const server = http.createServer(app);
 
 
 
-//设置静态文件目录
+// Define diretórios de arquivos estáticos
 app.use(express.static(utils.getRootPath()+'/static'));
 app.use(express.static(utils.getRootPath()+'/plugins'));
 
@@ -35,7 +35,7 @@ const clients = new Clients(clientConfig)
 
 wsServer.on('connection', (ws,msg) => {
 
-    //当有客户端连接上服务器，将会进到connection
+    // Quando um cliente conectar ao servidor, entrará aqui
     // console.log('=======connection========');
 
 
@@ -49,7 +49,7 @@ wsServer.on('connection', (ws,msg) => {
     let roomid = msg.url.split('/');
     const len = roomid.length-1;
     roomid = roomid[len];
-    //deckClient 是模拟器，其他的插件不带这个字段
+    // deckClient é o simulador; outros plugins não têm esse campo
     if(roomid == 'deckClient'){
 
         clients.addClient(ws,'deckClient');
@@ -67,5 +67,3 @@ wsServer.on('connection', (ws,msg) => {
 server.listen(serverPort,()=>{
     console.log(`server started and run http://127.0.0.1:${serverPort}`);
 });
-
-

@@ -1,33 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ulanzi Deck 开发模拟器</title>
+  <title>Ulanzi Deck - Simulador de Desenvolvimento</title>
   <link rel="stylesheet" href="./assets/index.css">
 </head>
 <body>
   <div class="wrapper">
     <div class="ulanzi-left" id="ulanzi-log">
       <!-- <div class="log-item">
-        <p class="log-time">[2024/10/28 10:18:47]</p> <p>加载插件成功</p>
+        <p class="log-time">[2024/10/28 10:18:47]</p> <p>Plugins carregados com sucesso</p>
         <div class="fence-box code-box">
           <span> node.exe "app.js" "127.0.0.1" "3906" </span>
         </div>
       </div> -->
       <div class="log-item">
-        <p>欢迎使用Ulanzi Deck开发模拟器！</p>
+        <p>Bem-vindo ao simulador de desenvolvimento Ulanzi Deck!</p>
       </div>
 
     </div>
     <div class="ulanzi-window">
       <div class="ulanzi-slider" id="ulanzi-list">
+        <!-- Exemplo de plugin -->
         <!-- <div class="ulanzi-slider-item">
           <div class="slider-item-title">
 
             <div class="icon-name category-icon">
               <img src="./com.ulanzi.analogclock.ulanziPlugin/assets/icons/icon.png">
-              <span>模拟时钟</span>
+              <span>Relógio simulado</span>
             </div>
           </div>
 
@@ -73,53 +74,52 @@
 
       <form class="ulanzi-form fence-box" id="ulanzi-config">
         <div>
-          <label>语言环境：</label>
-          <label><input type="radio" name="language" value="zh_CN" checked />中文</label>
-          <label><input type="radio" name="language" value="en" />English</label>
-          <label><input type="radio" name="language" value="ja_JP" />日语</label>
-          <label><input type="radio" name="language" value="de_DE" />德语</label>
-          <label><input type="radio" name="language" value="zh_HK" />繁体中文</label>
+          <label>Idioma:</label>
+          <label><input type="radio" name="language" value="zh_CN" checked />Chinês (Simplificado)</label>
+          <label><input type="radio" name="language" value="en" />Inglês</label>
+          <label><input type="radio" name="language" value="ja_JP" />Japonês</label>
+          <label><input type="radio" name="language" value="de_DE" />Alemão</label>
+          <label><input type="radio" name="language" value="zh_HK" />Chinês (Tradicional)</label>
         </div>
         <div>
-          <label>加载action：</label>
-          <label><input type="radio" name="loadAction" value="no" checked /><span>否</span></label>
-          <label><input type="radio" name="loadAction" value="yes"  /><span>是</span></label>
+          <label>Carregar action:</label>
+          <label><input type="radio" name="loadAction" value="no" checked /><span>Não</span></label>
+          <label><input type="radio" name="loadAction" value="yes"  /><span>Sim</span></label>
         </div>
         <!-- <div>
-          <label>运行主服务：</label>
-          <label><input type="radio" name="runMain" value="no" checked /><span>否</span></label>
-          <label><input type="radio" name="runMain" value="yes"  /><span>是</span></label>
+          <label>Executar serviço principal:</label>
+          <label><input type="radio" name="runMain" value="no" checked /><span>Não</span></label>
+          <label><input type="radio" name="runMain" value="yes"  /><span>Sim</span></label>
         </div> -->
         <br/>
         <div>
-          <button type="button" onclick="refreshList()">刷新插件列表</button>
+          <button type="button" onclick="refreshList()">Atualizar lista de plugins</button>
         </div>
       </form>
 
       <div>
-        <h4>本模拟器主要用于方便开发调试，具体运行效果请以桌面软件运行结果为准。</h4>
+        <h4>Este simulador serve para facilitar o desenvolvimento e depuração; os resultados reais podem variar em relação ao software de desktop.</h4>
         <ol style="padding-left: 20px;">
-          <li>开始编写插件前，请前往 <a href="https://github.com/UlanziTechnology/UlanziDeckPlugin-SDK
-            " target="_blank">插件开发SDK</a> 和 <a href="https://cloud.tencent.com/developer/article/2461403" target="_blank">从零开始：UlanziDeck插件开发之旅</a> 了解一些开发说明和介绍</li>
-          <li>测试插件请按照协议要求填写manifest.json，然后放在 UlanziDeckSimulator/plugins 目录中。模拟器会自动解析插件，并展示在模拟器左侧列表当中。插件更新需要点击 <strong>刷新插件列表</strong> 按钮，让模拟器重载插件。</li>
-          <li>当前版本，主服务需要开发者自行启动，请按照提示启动主服务再进行操作。</li>
-          <li>调试顺序：启动上位机模拟器 -> 确认插件主服务已连接 -> 拖入键盘，调试action</li>
-          <li>模拟器不支持上位机的特殊事件：openview, selectdialog。若有打开弹窗和选择文件夹功能，请在上位机中测试。</li>
-          <li>模拟器暂时没有页面切换，不主动发送setactive事件，请开发者右键自行发送事件来测试功能。</li>
-          <li>默认不加载action，我们的目的是让开发者自己运行action页面已达到开发调试的效果。打开加载action可能会导致与开发者打开的action页面有websocket冲突，影响测试结果。</li>
+          <li>Antes de começar a escrever plugins, visite <a href="https://github.com/UlanziTechnology/UlanziDeckPlugin-SDK" target="_blank">SDK de desenvolvimento de plugins</a> e <a href="https://cloud.tencent.com/developer/article/2461403" target="_blank">Do zero: Jornada de desenvolvimento de plugins UlanziDeck</a> para conhecer instruções e informações.</li>
+          <li>Para testar plugins, preencha o arquivo manifest.json conforme o protocolo e coloque-o no diretório <code>UlanziDeckSimulator/plugins</code>. O simulador irá analisar o plugin automaticamente e exibi-lo na lista à esquerda. Para atualizar um plugin, clique em <strong>Atualizar lista de plugins</strong> para recarregar o simulador.</li>
+          <li>Na versão atual, o serviço principal precisa ser iniciado manualmente pelo desenvolvedor; siga as instruções para iniciar o serviço principal antes de prosseguir.</li>
+          <li>Ordem de depuração: iniciar o simulador do computador host -> confirmar que o serviço principal do plugin está conectado -> arrastar o teclado e depurar a action.</li>
+          <li>O simulador não suporta certos eventos especiais do host: <code>openview</code>, <code>selectdialog</code>. Se o plugin abrir uma janela ou selecionar uma pasta, teste no host real.</li>
+          <li>O simulador atualmente não muda de página automaticamente e não envia <code>setactive</code> por conta própria; para testar esse evento, clique com o botão direito e envie manualmente.</li>
+          <li>Por padrão, não carregamos actions automaticamente; isso permite que o desenvolvedor execute a página da action para depuração. Carregar actions pode causar conflito de websocket com a página da action que o desenvolvedor abriu, afetando os testes.</li>
         </ol>
         
       </div>
     </div>
 
     <ul id="custom-menu">
-      <li id="menu-run">运行</li>
-      <li id="menu-clear">删除</li>
-      <li id="menu-setactive">设置活跃状态</li>
-      <li id="menu-setnoactive">设置非活跃状态</li>
+      <li id="menu-run">Executar</li>
+      <li id="menu-clear">Remover</li>
+      <li id="menu-setactive">Definir como ativo</li>
+      <li id="menu-setnoactive">Definir como inativo</li>
   </ul>
 
-  <div class="toast" id="toast">复制成功！</div>
+  <div class="toast" id="toast">Copiado!</div>
   </div>
   <script src="./assets/keys.js"></script>
   <script src="./assets/index.js"></script>

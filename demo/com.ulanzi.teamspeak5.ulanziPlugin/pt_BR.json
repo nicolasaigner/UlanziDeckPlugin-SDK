@@ -1,0 +1,54 @@
+{
+	"Name" : "TeamSpeak 5",
+	"Description": "TeamSpeak 5",
+	"Actions" :
+	[
+		{
+			"Name": "Silenciar microfone",
+			"Tooltip": "Ativa/desativa o microfone"
+		},
+		{
+			"Name": "Silenciar áudio",
+			"Tooltip": "Ativa/desativa a saída de áudio"
+		},
+		{
+			"Name": "AFK",
+			"Tooltip": "Alterna o estado AFK"
+		},
+		{
+			"Name": "Pressione para falar",
+			"Tooltip": "Pressione para falar"
+		},
+		{
+			"Name": "Pressione para silenciar",
+			"Tooltip": "Pressione para silenciar"
+		},
+		{
+			"Name": "Responder último sussurro",
+			"Tooltip": "Responder o último usuário que sussurrou"
+		},
+		{
+			"Name": "Sussurrar ao usuário selecionado",
+			"Tooltip": "Sussurrar rapidamente para o usuário selecionado"
+		},
+		{
+			"Name": "Sussurrar à lista",
+			"Tooltip": "Sussurrar para membros da lista"
+		},
+		{
+			"Name": "Usuários ativos",
+			"Tooltip": "Ver usuários atualmente falando"
+		}
+	],
+	"Localization":{
+		"disconnected":"Desconectado",
+		"connecting":"Conectando",
+		"connected":"Conectado",
+		"Whisperlist":"Lista de sussurros",
+		"whisperlist.name":"Nome da lista de sussurros",
+		"Save":"Salvar",
+		"Open Setup Guide":"Abrir guia de configuração",
+		"Connection status":"Status da conexão"
+	}
+}
+

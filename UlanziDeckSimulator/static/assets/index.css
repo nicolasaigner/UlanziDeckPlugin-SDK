@@ -1,6 +1,4 @@
-
-@font-face {
-  font-family: 'Source Han Sans SC';
+font-family: 'Source Han Sans SC';
   src: url('./SourceHanSansSC-Regular-2.otf') format('opentype');
 }
 
@@ -38,7 +36,7 @@ ul{
 
 .ulanzi-left, .ulanzi-right {
   position: relative;
-  flex: 1; /* 使左右两个 div 平均分配剩余空间 */
+  flex: 1; /* Faz com que as duas divs (esquerda e direita) compartilhem igualmente o espaço restante */
   height: 100%;
   overflow-y: auto;
   padding-top: 10px;
@@ -139,14 +137,16 @@ ul{
   top: -13px;
 }
 .ulanzi-form:before {
-  content: "调试配置";
+  /* Configuração exibida acima do formulário */
+  content: "Configuração de depuração";
 }
 .code-box{
   cursor: pointer;
   word-wrap: break-word;
 }
 .code-box:before{
-  content: "点击复制代码";
+  /* Texto de instrução para copiar */
+  content: "Clique para copiar o código";
 }
 
 .toast {

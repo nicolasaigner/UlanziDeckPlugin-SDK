@@ -1,7 +1,7 @@
 class UlanziUtils {
 
   	/**
-   * 获取根目录
+   * Obtém o diretório raiz
    */
 	getRootPath(){
 		const currentFilePath = process.argv[1];
@@ -18,18 +18,18 @@ class UlanziUtils {
 	}
 
   time(){
-    return new Date().toLocaleString('zh-CN', {hour12: false})
+    return new Date().toLocaleString('pt-BR', {hour12: false})
   }
 
   /**
-   * 创建唯一值
+   * Cria uma chave única (context)
   */
   encodeContext(jsn) {
     return jsn.uuid + '___' + jsn.key + '___' + jsn.actionid
   }
 
   /**
-   * 解构唯一值
+   * Desconstrói a chave única (context)
   */
   decodeContext(context) {
     const de_ctx = context.split('___')
@@ -41,7 +41,7 @@ class UlanziUtils {
   }
 
   /**
-	   * JSON.parse优化
+	   * Otimização do JSON.parse
 	 * parse json
 	 * @param {string} jsonString
 	 * @returns {object} json

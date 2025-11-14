@@ -1,4 +1,3 @@
-
 import EventEmitter from 'events';
 import menu from './menu.js';
 import DeckClient from './deckClient.js';
@@ -9,13 +8,13 @@ export default class Clients extends EventEmitter {
     super();
 
     this.config = config;
-    this.clientList = {};  //存储插件列表
-    this.contextDatas = {};  //存储插件数据
+    this.clientList = {};  //Armazena a lista de plugins
+    this.contextDatas = {};  //Armazena os dados do plugin
 
-    this.activeKeys = {};//已使用的key
-    
+    this.activeKeys = {};//Chaves já em uso
 
-    this.deckClient = null; //上位机模拟器客户端
+
+    this.deckClient = null; //Cliente simulador do computador host
 
     this.plugins = menu.plugins;
     menu.on('listUpdated', (data) => {
@@ -33,7 +32,7 @@ export default class Clients extends EventEmitter {
   addClient(client, type) {
     if (type === 'deckClient') {
       this.deckClient = new DeckClient(client);
-      this.log('连接上位机模拟器成功！等待加载插件...')
+      this.log('Conexão com o emulador do computador host estabelecida com sucesso! Aguardando o carregamento dos plugins...')
       this.deckClient.send('init',{
         config:this.config,
         activeKeys:this.activeKeys
@@ -43,7 +42,7 @@ export default class Clients extends EventEmitter {
         this.checkMainState()
       }
       if(Object.keys(this.activeKeys).length != 0){
-        this.log('键盘重载，向已启动的主服务发送setactive事件，主服务应发送当前状态的icon数据。')
+        this.log('Quando o teclado é recarregado, um evento setactive é enviado ao serviço principal que foi iniciado. O serviço principal deve então enviar os dados do ícone para o estado atual.')
         for(const k in this.activeKeys){
           const {  uuid, key, actionid } = this.activeKeys[k]
           const mainUuid = this.getMainUuid(uuid)
@@ -97,7 +96,7 @@ export default class Clients extends EventEmitter {
         const oldLanguage = this.config.language
         this.config = data.config;
         if(this.config.language != oldLanguage){
-          this.log('正在切换插件语言环境...')
+          this.log('Alterando o ambiente de idioma do plugin...')
           menu.getList()
         }
       })
@@ -114,7 +113,7 @@ export default class Clients extends EventEmitter {
         if(typeof data.code != 'undefined') return;
         if(data.cmd === 'state') {
           this.deckClient && this.deckClient.send('state', data)
-          //回复
+          //resposta
           this.replay(client,data)
         }
         if(data.cmd === 'paramfromplugin') {
@@ -145,17 +144,17 @@ export default class Clients extends EventEmitter {
 
     const mainUuid = this.getMainUuid(uuid)
 
-    //回复
+    //resposta
     this.replay(client,{
       cmd: 'paramfromplugin',
       ...data,
     })
 
-    const isMainSend = this.clientList[mainUuid] == client  // 判断是不是主服务发送的
+    const isMainSend = this.clientList[mainUuid] == client  // Determina se é o serviço principal que está enviando
 
 
-    this.log(`${isMainSend?'插件主服务':context} 发送paramfromplugin事件。上位机将转发给 ${isMainSend?context:'插件主服务'} ，转发的数据上位机会保存下来，再次连接action页面会通过paramfromapp接收到之前的配置数据。以下是转发的数据：`,JSON.stringify(data))
-    //转发
+    this.log(`${isMainSend?'Serviço principal do plugin':context} enviou o evento paramfromplugin. O computador host o encaminhará para ${isMainSend?context:'serviço principal do plugin'}. Os dados encaminhados serão salvos pelo computador host e, ao reconectar à página de ação, os dados de configuração anteriores serão recebidos através de paramfromapp. A seguir estão os dados encaminhados：`,JSON.stringify(data))
+    //Encaminhar
     if(isMainSend){
       if (this.clientList[context] && this.clientList[context].readyState == 1){
         this.clientList[context].send(JSON.stringify({
@@ -178,7 +177,7 @@ export default class Clients extends EventEmitter {
     const { uuid,key,actionid } = data;
     const isMain = uuid.split('.').length == 4;
     if(isMain){
-      this.log('主服务 '+uuid + ' 已连接！')
+      this.log('Serviço principal '+uuid + ' conectado!')
       this.clientList[uuid] = client;
       this.checkMainState('onlyCheck')
     }else{
@@ -187,7 +186,7 @@ export default class Clients extends EventEmitter {
       const param = this.contextDatas[context] || null;
       if(this.activeKeys[key] && this.activeKeys[key].uuid === uuid && this.activeKeys[key].actionid === actionid){
         
-        this.log(`配置项 ${uuid} 已连接！键值为${key}，actionid为${actionid}。上位机模拟器向该action页面和主服务再次发送paramfromapp事件。${param?'以下是重载数据':''}`
+        this.log(`Item de configuração ${uuid} conectado! O valor da chave é ${key} e o actionid é ${actionid}. O simulador do computador host envia novamente o evento paramfromapp para esta página de ação e para o serviço principal. ${param?'Abaixo estão os dados de recarregamento':''}`
           ,param?JSON.stringify(param):null
         )
         this.send('paramfromapp',{
@@ -197,7 +196,7 @@ export default class Clients extends EventEmitter {
           uuid,key,actionid,param
         },true)
       }else{
-        this.log(`配置项 ${uuid} 已连接！键值为${key}，actionid为${actionid}。上位机模拟器向该action页面发送add和paramfromapp事件。${param?'以下是重载数据':''}`
+        this.log(`Item de configuração ${uuid} conectado! O valor da chave é ${key} e o actionid é ${actionid}. O simulador do computador host envia os eventos add e paramfromapp para esta página de ação. ${param?'Abaixo estão os dados de recarregamento':''}`
           ,param?param:null
         )
         this.send('add',{
@@ -212,12 +211,12 @@ export default class Clients extends EventEmitter {
 
 
   refreshList() {
-    this.log('正在加载插件列表...')
+    this.log('Carregando a lista de plugins...')
     menu.getList()
   }
 
   replay(client, data) {
-     //回复
+     //resposta
      client.send(JSON.stringify({
       ...data,
       code: 0
@@ -230,17 +229,17 @@ export default class Clients extends EventEmitter {
       const v = this.plugins[k]
       const renderDate = this.config.language === 'zh_CN' && v.zhData ? v.zhData : v
   
-      if (this.clientList[v.UUID] && this.clientList[v.UUID].readyState == 1) { //存在并且还是连接状态
-          if(!onlyCheck)this.log(renderDate.Name + ' 主服务 '+ v.UUID +' 已连接！')
+      if (this.clientList[v.UUID] && this.clientList[v.UUID].readyState == 1) { //Verifica se existe e se ainda está conectado
+          if(!onlyCheck)this.log(renderDate.Name + ' Serviço principal '+ v.UUID +' conectado！')
           connectedMain.push(v)
       } else {
           let code = ''
           let msg = ''
           if (v.CodePath.indexOf('.js') >= 0) {
-              msg = renderDate.Name  + ' 主服务 '+ v.UUID +' 未连接，请到插件的根目录 ' + k +' 下运行以下代码启动主服务'
+              msg = renderDate.Name  + ' Serviço principal '+ v.UUID +' não conectado, por favor, vá para o diretório raiz do plugin ' + k +' e execute o seguinte código para iniciar o serviço principal'
               code = `node ${v.CodePath} 127.0.0.1 ${this.config.serverPort} ${this.config.language}`
           } else {
-              msg = renderDate.Name + ' 主服务 '+ v.UUID +' 未连接，请使用浏览器打开以下链接启动主服务'
+              msg = renderDate.Name + ' Serviço principal '+ v.UUID +' não conectado, por favor, use um navegador para abrir o seguinte link para iniciar o serviço principal'
               code = `http://127.0.0.1:${this.config.serverPort}/${k}/${v.CodePath}?address=127.0.0.1&port=${this.config.serverPort}&language=${this.config.language}&uuid=${v.UUID}`
           }
           if(!onlyCheck)this.log(msg, code)
@@ -284,7 +283,7 @@ export default class Clients extends EventEmitter {
 
   getMainUuid(uuid){
     if(!uuid) return console.error('[UlanziDeck Tips]: uuid not found!');
-    const parts = uuid.split('.'); // 将字符串按 . 分割成数组
+    const parts = uuid.split('.'); // Divide a string em um array usando '.' como delimitador
     return parts.slice(0, 4).join('.');
   }
 }

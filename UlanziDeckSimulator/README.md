@@ -1,34 +1,34 @@
-# UlanziDeck Simulator
-
+# Simulador UlanziDeck
 
 <p align="start">
-   <strong>English</strong> | <a href="./README.zh.md">简体中文</a>
+   <strong>Português (BR)</strong> | <a href="README.en.md">English</a> | <a href="README.zh.md">简体中文</a> 
 </p>
 
 
-## Introduction
-The UlanziDeck Simulator is used to simulate communication between the UlanziDeck application and plugins. Developers can test plugin functionality on this simulator. This simulator is mainly used for development and debugging convenience. Please refer to the desktop software running results for specific operational effects.
+## Introdução
+O Simulador UlanziDeck é usado para simular a comunicação entre o aplicativo UlanziDeck e plugins. Desenvolvedores podem testar funcionalidades de plugins neste simulador. Este simulador é voltado principalmente para facilitar desenvolvimento e depuração; para resultados finais, confira o software de desktop.
 
-## Running
+## Execução
 
 ```
 npm install
 npm start
 ```
 
-## Instructions
+## Instruções
  <ol>
-  <li>Before starting plugin development, please visit <a href="https://github.com/UlanziTechnology/UlanziDeckPlugin-SDK" target="_blank">Plugin Development SDK</a> and <a href="https://cloud.tencent.com/developer/article/2461403" target="_blank">Starting from Zero: Journey of UlanziDeck Plugin Development</a> to understand some development instructions and introductions</li>
-  <li>To test plugins, please fill in manifest.json according to protocol requirements, then place it in the <strong>UlanziDeckSimulator/plugins</strong> directory. The simulator will automatically parse the plugin and display it in the simulator's left-side list. Plugin updates require clicking the <strong>Refresh Plugin List</strong> button to reload the plugin.</li>
-  <li>In the current version, developers need to start the main service themselves. Please follow the prompts to start the main service before proceeding with operations.</li>
-  <li>Debugging sequence: Start <strong>UlanziDeck simulator</strong> -> <strong>Confirm plugin main service is connected</strong> -> <strong>Drag in keyboard, debug action</strong></li>
-  <li>The simulator does not support special UlanziDeck events: openview, selectdialog. If you have open dialog and select file/folder functionality, please test in the UlanziDeck application.</li>
-  <li>The simulator currently does not have page switching and does not actively send setactive events. Developers should right-click to send events manually to test functionality.</li>
-  <li>Actions are not loaded by default. Our goal is for developers to run the action page themselves to achieve development and debugging effects. Enabling action loading may cause websocket conflicts with developer-opened action pages, affecting test results.</li>
+  <li>Antes de começar a desenvolver plugins, visite <a href="https://github.com/UlanziTechnology/UlanziDeckPlugin-SDK" target="_blank">Plugin Development SDK</a> e <a href="https://cloud.tencent.com/developer/article/2461403" target="_blank">Do zero: Jornada de desenvolvimento de plugins UlanziDeck</a> para entender instruções e orientações.</li>
+  <li>Para testar plugins, preencha o arquivo <code>manifest.json</code> conforme o protocolo e coloque-o no diretório <strong>UlanziDeckSimulator/plugins</strong>. O simulador irá analisar automaticamente o plugin e exibi-lo na lista à esquerda. Para atualizar um plugin, clique em <strong>Atualizar lista de plugins</strong> para recarregar o simulador.</li>
+  <li>Nesta versão, o serviço principal precisa ser iniciado manualmente pelo desenvolvedor; siga as instruções para iniciar o serviço principal antes de prosseguir.</li>
+  <li>Ordem de depuração: iniciar o simulador do computador host -> confirmar que o serviço principal do plugin está conectado -> arrastar o teclado e depurar a action.</li>
+  <li>O simulador não suporta certos eventos especiais do host: <code>openview</code>, <code>selectdialog</code>. Se o plugin abrir uma janela ou selecionar uma pasta, teste no host real.</li>
+  <li>O simulador atualmente não muda de página automaticamente e não envia <code>setactive</code> por conta própria; para testar esse evento, clique com o botão direito e envie manualmente.</li>
+  <li>Por padrão, não carregamos actions automaticamente; isso permite que o desenvolvedor execute a página da action para depuração. Ativar o carregamento de actions pode causar conflito de websocket com a página da action aberta pelo desenvolvedor e afetar os testes.</li>
 </ol>
 
-## Features
+## Funcionalidades
 
-1. UlanziDeck simulator, default port 39069
-2. After successful startup, open http://127.0.0.1:39069 in browser
-3. Follow simulator prompts for testing 
+1. Simulador UlanziDeck, porta padrão 39069
+2. Após iniciar com sucesso, abra http://127.0.0.1:39069 no navegador
+3. Siga as instruções do simulador para testes
+

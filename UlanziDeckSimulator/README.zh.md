@@ -1,7 +1,7 @@
 # 上位机模拟器
 
 <p align="start">
-   <a href="./README.md">English</a> | <strong>简体中文</strong>
+   <strong>简体中文</strong> | <a href="README.en.md">English</a> | <a href="README.md">Português (BR)</a> 
 </p>
 
 ## 介绍

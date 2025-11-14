@@ -1,18 +1,18 @@
-let ulanziLog = null; // 日志节点
-let plugins = null; // 插件列表
-let customMenu = null; // 自定义菜单节点
+let ulanziLog = null; // nó de log
+let plugins = null; // lista de plugins
+let customMenu = null; // nó do menu personalizado
 let config = {
   "language": "zh_CN",
   "loadAction": "no",
   "runMain": "no",
   "rootPath": "",
   serverPort: window.location.port
-}  //默认配置
+}  // configuração padrão
 
-let activeKeys = {} // 当前激活的插件列表
-let currentActiveKey = ''; // 当前激活的插件
+let activeKeys = {} // lista atual de plugins ativados
+let currentActiveKey = ''; // plugin atualmente ativo
 
-let contextmenuKey = ''; // 右键菜单的key
+let contextmenuKey = ''; // chave do menu de contexto
 
 
 const websocket = new WebSocket(`ws://127.0.0.1:${config.serverPort}/deckClient`)
@@ -71,19 +71,19 @@ function setStateIcon(iconData) {
   const { plugin, actionData, actionid, uuid } = activeKeys[key]
 
   if (type === 0) {
-    //本地文件,状态列表
+    // arquivo local, lista de estados
     src = `./${plugin}/${actionData.States[data.state].Image}`
   } else if ( type === 1) {
-    //base64
+    // base64
     src = data.data
   } else if ( type === 3) {
-    //gif base64
+    // gif em base64
     src = data.gifdata
   } else if ( type === 2) {
-    //本地绝对路径
+    // caminho absoluto local
     src = getRelativePath(data.path)
   } else if ( type === 4) {
-    //本地gif绝对路径
+    // caminho gif absoluto local
     src = getRelativePath(data.gifpath)
   }
   if(!ukImg){
@@ -95,7 +95,7 @@ function setStateIcon(iconData) {
 }
 
 
-//获取相对路径，适配上位机绝对路径
+// obtém o caminho relativo, adaptando caminhos absolutos do host
 function getRelativePath(path){
   let rPath = path;
   const sStr = 'UlanziDeckSimulator/plugins/';
@@ -107,6 +107,7 @@ function getRelativePath(path){
 
   return rPath
 }
+
 
 
 async function listUpdated(data) {
@@ -144,7 +145,7 @@ async function listUpdated(data) {
             <ul class="slider-item-actions">
               ${liBuffer.join('')}
             </ul>
-            <div class="slider-item-overlay" data-uuid="${v.UUID}">请先启动主服务</div>
+            <div class="slider-item-overlay" data-uuid="${v.UUID}">Por favor inicie o serviço principal primeiro</div>
           </div>
         </div>`)
 
@@ -154,30 +155,29 @@ async function listUpdated(data) {
 }
 
 
-
 function log(data) {
 
-  // 创建一个新的div元素
+  // Cria um novo elemento div
   const logItem = document.createElement('div');
   logItem.className = 'log-item';
 
-  // 创建时间显示的p标签
+  // Cria o parágrafo que mostra a hora
   const logTime = document.createElement('p');
   logTime.className = 'log-time';
   logTime.textContent = `[${data.time}]`;
   logItem.appendChild(logTime);
 
-  // 创建日志信息的p标签
+  // Cria o parágrafo com a informação do log
   const logText = document.createElement('p');
   logText.textContent = data.msg;
   logItem.appendChild(logText);
 
   if (data.code) {
-    // 创建代码框div
+    // Cria a div do quadro de código
     const codeBox = document.createElement('div');
     codeBox.className = 'fence-box code-box';
 
-    // 创建代码显示的span标签
+    // Cria o span que mostra o código
     const codeSpan = document.createElement('span');
     codeSpan.textContent = data.code;
     codeBox.appendChild(codeSpan);
@@ -185,7 +185,7 @@ function log(data) {
   }
 
 
-  // 将创建好的logItem添加到目标节点中
+  // Insere o logItem criado no nó alvo
   ulanziLog.insertBefore(logItem, ulanziLog.firstChild);
 }
 
@@ -199,7 +199,7 @@ function toast(msg) {
 }
 
 function time() {
-  return new Date().toLocaleString('zh-CN', { hour12: false })
+  return new Date().toLocaleString('pt-BR', { hour12: false })
 }
 
 
@@ -277,28 +277,28 @@ document.addEventListener('DOMContentLoaded', function () {
 
   log({
     time: time(),
-    msg: '正在连接上位机模拟器...',
+    msg: 'Conectando ao simulador do computador host...',
   })
 
   ulanziLog.addEventListener('click', async function (event) {
-    // 检查点击的目标是否是 .code-box 或其子元素
+    // Verifica se o alvo do clique é .code-box ou um de seus filhos
     const codeBox = event.target.closest('.code-box');
     if (codeBox) {
-      // 获取要复制的文本内容
+      // Obtém o texto a ser copiado
       const textToCopy = codeBox.querySelector('span').innerText;
 
       try {
-        // 复制文本到剪贴板
+        // Copia o texto para a área de transferência
         await navigator.clipboard.writeText(textToCopy);
-        toast('复制成功！');
+        toast('Copiado com sucesso!');
       } catch (err) {
-        console.error('复制失败:', err);
-        toast('复制失败，请尝试手动复制。');
+        console.error('Falha ao copiar:', err);
+        toast('Falha ao copiar, por favor tente copiar manualmente.');
       }
     }
   });
 
-  //监听配置变化
+  // ouvinte para alterações na configuração
   form = document.getElementById('ulanzi-config')
   form.addEventListener(
     'input',
@@ -314,30 +314,30 @@ document.addEventListener('DOMContentLoaded', function () {
     })
 
 
-  //拖拽事件
+  // eventos de arrastar e soltar
 
   const ulanziKey = document.querySelectorAll('.ulanzi-key');
   customMenu = document.getElementById('custom-menu');
-  // 目标区域的处理
+  // área alvo
   ulanziKey.forEach(uk => {
     uk.addEventListener('dragover', function (e) {
-      e.preventDefault(); // 阻止默认行为以允许放置
+      e.preventDefault(); // evita o comportamento padrão para permitir o drop
     });
 
     uk.addEventListener('drop', function (e) {
       const index = uk.dataset.index
       const keyValue = keys[index]
       e.preventDefault();
-      const data = e.dataTransfer.getData('text/plain'); // 获取拖拽的数据
+      const data = e.dataTransfer.getData('text/plain'); // obtém os dados arrastados
       const plugin_action = data.split('___');
       const plugin = plugin_action[0];
       const action = plugin_action[1];
       const actionData = plugins[plugin].Actions[action];
-      this.innerHTML = `<img src="./${plugin}/${actionData.Icon}">`; // 将数据放入目标区域
+      this.innerHTML = `<img src="./${plugin}/${actionData.Icon}">`; // insere a imagem no alvo
 
       log({
         time: time(),
-        msg: `${actionData.UUID}拖入键盘，键值是${keyValue.key}，actionid是${keyValue.actionid}。上位机向主服务发送add和paramfromapp事件。请使用浏览器打开以下路径，调试该action。`,
+        msg: `${actionData.UUID} arrastado para o teclado, chave é ${keyValue.key}, actionid é ${keyValue.actionid}. O host envia eventos add e paramfromapp para o serviço principal. Abra o link abaixo no navegador para depurar esta action.`,
         code: `http://127.0.0.1:${config.serverPort}/${plugin}/${actionData.PropertyInspectorPath}?address=127.0.0.1&port=${config.serverPort}&language=${config.language}&uuid=${actionData.UUID}&actionId=${keyValue.actionid}&key=${keyValue.key}`
       })
       send('add', { uuid: actionData.UUID, key: keyValue.key, actionid: keyValue.actionid })
@@ -347,7 +347,7 @@ document.addEventListener('DOMContentLoaded', function () {
       handleActiveCurrentKey()
     });
 
-    //右键
+    // clique com o botão direito
     uk.addEventListener('contextmenu', function (event) {
       event.preventDefault();
       const imgLength = uk.getElementsByTagName('img')
@@ -357,7 +357,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
 
-    //点击
+    // clique
     uk.addEventListener('click', function (event) {
       event.preventDefault();
       const imgLength = uk.getElementsByTagName('img')
@@ -371,12 +371,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
   });
 
-  // 隐藏菜单
+  // esconde o menu
   document.addEventListener('click', function () {
     hideCustomMenu();
   });
 
-  // 处理菜单项点击事件
+  // trata clique nos itens do menu
   customMenu.addEventListener('click', function (event) {
     event.stopPropagation();
     const target = event.target;
@@ -397,7 +397,7 @@ function send(cmd, data) {
   }));
 }
 
-// 初始化单个可拖动节点
+// Inicializa um único nó arrastável
 function initializeDraggable(draggable) {
   draggable.addEventListener('dragstart', function (e) {
     const dragImage = draggable.getElementsByTagName('img')[0];
@@ -407,38 +407,38 @@ function initializeDraggable(draggable) {
     // img.src = dragImage.src;
     // img.width = 32 ;
     // img.height = 32 ;
-    e.dataTransfer.setData('text/plain', action); // 设置拖拽数据
-    e.dataTransfer.setDragImage(dragImage, 20, 20); // 设置拖拽时显示的图像
-    setTimeout(() => { this.style.opacity = '0.5'; }, 0); // 可视化拖动效果
+    e.dataTransfer.setData('text/plain', action); // define os dados do arraste
+    e.dataTransfer.setDragImage(dragImage, 20, 20); // define a imagem exibida durante o arraste
+    setTimeout(() => { this.style.opacity = '0.5'; }, 0); // efeito visual de arraste
 
   });
 
   draggable.addEventListener('dragend', function () {
-    this.style.opacity = '1'; // 拖动结束恢复原样
+    this.style.opacity = '1'; // restaura o estilo ao terminar o arraste
   });
 }
 
-// 初始化所有已有的可拖动节点
+// Inicializa todos os nós arrastáveis existentes
 function initializeDraggables() {
   const draggables = document.querySelectorAll('.draggable');
   draggables.forEach(initializeDraggable);
 }
 
-// 显示自定义菜单
+// Mostra o menu personalizado
 function showCustomMenu(event) {
   customMenu.style.display = 'block';
   customMenu.style.left = event.pageX + 'px';
   customMenu.style.top = event.pageY + 'px';
 }
 
-// 隐藏自定义菜单
+// Oculta o menu personalizado
 function hideCustomMenu() {
   customMenu.style.display = 'none';
 }
 
 
 
-// 处理菜单项点击的具体逻辑
+// Lógica para tratar clique nos itens do menu
 function handleMenuItemClick(itemId) {
   const { uuid, key, actionid } = activeKeys[contextmenuKey]
   switch (itemId) {
@@ -446,14 +446,14 @@ function handleMenuItemClick(itemId) {
       send('run', { uuid, key, actionid })
       log({
         time: time(),
-        msg: `运行 ${uuid}___${key}___${actionid}。上位机向主服务发送run事件。`
+        msg: `Executando ${uuid}___${key}___${actionid}. O host envia um evento run para o serviço principal.`
       })
       break;
     case 'menu-clear':
       send('clear', { "param": [{ uuid, key, actionid }] })
       log({
         time: time(),
-        msg: `删除 ${uuid}___${key}___${actionid}。上位机向主服务发送clear事件。`
+        msg: `Removendo ${uuid}___${key}___${actionid}. O host envia um evento clear para o serviço principal.`
       })
       const element = document.querySelector('.ulanzi-key[data-key="' + key + '"]');
       element.removeChild(element.firstChild);
@@ -467,14 +467,14 @@ function handleMenuItemClick(itemId) {
       send('setactive', { uuid, key, actionid, active: true })
       log({
         time: time(),
-        msg: `设置活跃状态 ${uuid}___${key}___${actionid}。活跃状态触发时，有状态变化，主服务要更新icon。`
+        msg: `Definindo como ativo ${uuid}___${key}___${actionid}. Ao ativar, se houver mudança de estado, o serviço principal deve atualizar o ícone.`
       })
       break;
     case 'menu-setnoactive':
       send('setactive', { uuid, key, actionid, active: false })
       log({
         time: time(),
-        msg: `设置非活跃状态 ${uuid}___${key}___${actionid}。非活跃状态下，若有定时任务，主服务要保持后台静默运行，但是不用发送消息到上位机。`
+        msg: `Definindo como inativo ${uuid}___${key}___${actionid}. Em estado inativo, se houver tarefas agendadas, o serviço principal deve continuar rodando em silêncio, sem enviar mensagens ao host.`
       })
       break;
     default:
@@ -497,10 +497,10 @@ function handleActiveCurrentKey() {
   }
 
 
-  // 使用 querySelectorAll 查找所有 .ulanzi-key 元素
+  // Usa querySelectorAll para buscar todos os elementos .ulanzi-key
   const allUlanziKeys = document.querySelectorAll('.ulanzi-key');
 
-  // 遍历所有 .ulanzi-key 元素，删除 active 类名
+  // Percorre todos os elementos .ulanzi-key e remove a classe active
   allUlanziKeys.forEach(element => {
     if (element !== activeElement) {
       element.classList.remove('active');
@@ -509,4 +509,3 @@ function handleActiveCurrentKey() {
 
 
 }
-

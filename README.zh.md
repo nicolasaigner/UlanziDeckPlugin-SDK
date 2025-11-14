@@ -2,7 +2,7 @@
 # U-Studio插件开源计划 
 
 <p align="start">
-   <a href="/README.md">English</a> | <strong>简体中文</strong>
+   <strong>简体中文</strong> | <a href="/README.en.md">English</a> | <a href="/README.pt_BR.md">Português (BR)</a>
 </p>
 
 为提升创作者的工作效率并满足多样化需求，U-Studio团队倡导了UlanziDeck项目。我们相信创作者不仅是消费者，更是生产者，通过共同创作和分享内容，实现双赢。我们发起了UlanziDeck插件开发计划，通过与众多开发者的紧密合作，成功开发了许多功能丰富的插件。为了进一步方便和激励开发者，我们决定创建开源仓库，邀请所有开发者参与进来，共同打造一个更加开放、灵活、强大的插件平台。

@@ -1,2 +1,2 @@
-# 忽略所有node_modules下的文件
+# Ignora todos os arquivos dentro de node_modules
 node_modules

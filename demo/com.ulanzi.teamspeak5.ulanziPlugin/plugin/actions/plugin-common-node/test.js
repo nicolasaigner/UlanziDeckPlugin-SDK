@@ -1,14 +1,12 @@
-
-
 import { RandomPort, UlanzideckApi, Utils } from './index.js';
 
 
 const generatePort = new RandomPort(); 
-//生成随机接口
-const port = generatePort.getPort(); 
+// Gera uma porta aleatória
+const port = generatePort.getPort();
 
 
-//获取根目录文件路径
+// Caminho do diretório raiz do plugin
 const _pluginPath = Utils.getPluginPath()
 
 console.log('Random port: ', port)
@@ -20,7 +18,7 @@ console.log('UlanzideckApi loaded');
 
 
 const $UD = new UlanzideckApi();
-//socket 连接
+// conexão do socket
 $UD.connect('com.ulanzi.ulanzideck.analogclock')
 
 $UD.onConnected(conn => {

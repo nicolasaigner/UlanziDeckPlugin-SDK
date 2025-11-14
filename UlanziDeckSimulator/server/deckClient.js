@@ -1,4 +1,3 @@
-
 import EventEmitter from 'events';
 import menu from './menu.js';
 import utils from './utils.js';
@@ -41,7 +40,7 @@ export default class DeckClient extends EventEmitter {
         this.send('listUpdated', {
             data
         })
-        this.log('加载插件列表成功！')
+        this.log('Lista de plugins carregada com sucesso!')
     }
 
     send(cmd, data) {

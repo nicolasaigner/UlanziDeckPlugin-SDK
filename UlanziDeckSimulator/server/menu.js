@@ -16,27 +16,27 @@ class PluginMenu extends EventEmitter {
       try {
 
         this.plugins = {}
-        // 定义plugins文件夹的路径
+        // Define o caminho da pasta plugins
         const pluginsDir = utils.getRootPath()+'/plugins';
 
-        // 同步读取plugins文件夹下的所有子文件夹
+        // Lê sincronamente todas as subpastas da pasta plugins
         const files = fs.readdirSync(pluginsDir);
 
-        // 遍历所有子文件夹
+        // Itera por todas as subpastas
         files.forEach(file => {
             const filePath = path.join(pluginsDir, file);
 
-            // 同步检查是否为文件夹并且以'ulanziPlugin'结尾
+            // Verifica sincronicamente se é uma pasta e se termina com 'ulanziPlugin'
             const stats = fs.statSync(filePath);
             if (stats.isDirectory() && file.endsWith('ulanziPlugin')) {
               // console.log('===file',file)
-                // 构造manifest.json的完整路径
+                // Constroi o caminho completo para o manifest.json
                 const manifestPath = path.join(filePath, 'manifest.json');
 
-                // 同步读取manifest.json文件
+                // Lê sincronamente o arquivo manifest.json
                 const data = fs.readFileSync(manifestPath, 'utf8');
 
-                // 解析JSON数据
+                // Analisa os dados JSON
                 const manifest = JSON.parse(data);
 
                 try{
