@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instruções Rápidas - Simulador UlanziDeck</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #0078ff;
+            margin-top: 0;
+        }
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .step {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 3px solid #0078ff;
+        }
+        code {
+            background: #282828;
+            color: #fff;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 14px;
+        }
+        .code-block {
+            background: #282828;
+            color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        .button {
+            display: inline-block;
+            background: #0078ff;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px 5px;
+        }
+        .button:hover {
+            background: #0056b3;
+        }
+        .button.secondary {
+            background: #6c757d;
+        }
+        .button.secondary:hover {
+            background: #5a6268;
+        }
+        ul {
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>🎮 Bem-vindo ao Simulador UlanziDeck!</h1>
+
+        <div class="warning">
+            <strong>⚠️ Vendo a mensagem "Por favor inicie o serviço principal primeiro"?</strong><br>
+            Isso é NORMAL! Siga os passos abaixo para resolver.
+        </div>
+
+        <h2>🚀 Início Rápido (3 passos)</h2>
+
+        <div class="step">
+            <strong>PASSO 1:</strong> Abra uma NOVA ABA no navegador
+        </div>
+
+        <div class="step">
+            <strong>PASSO 2:</strong> Cole esta URL na nova aba:
+            <div class="code-block">http://localhost:39069/com.ulanzi.analogclock.ulanziPlugin/plugin/app.html?address=127.0.0.1&port=39069&language=pt_BR&uuid=com.ulanzi.ulanzideck.analogclock</div>
+            <p><a href="http://localhost:39069/com.ulanzi.analogclock.ulanziPlugin/plugin/app.html?address=127.0.0.1&port=39069&language=pt_BR&uuid=com.ulanzi.ulanzideck.analogclock" class="button" target="_blank">
+                📱 Clique aqui para abrir o serviço principal
+            </a></p>
+            <p><em>Nota: Você verá uma página em branco - isso é normal! Deixe essa aba aberta.</em></p>
+        </div>
+
+        <div class="step">
+            <strong>PASSO 3:</strong> Volte para a aba do simulador
+            <p><a href="http://localhost:39069" class="button secondary">🔙 Ir para o simulador</a></p>
+        </div>
+
+        <div class="success">
+            <strong>✅ Pronto!</strong> Agora a mensagem de erro deve ter sumido e você pode usar o plugin!
+        </div>
+
+        <hr style="margin: 30px 0;">
+
+        <h2>📖 Como usar o plugin Analog Clock</h2>
+        <ol>
+            <li>No simulador, encontre o plugin "Analog Clock" na lista à esquerda</li>
+            <li><strong>Arraste</strong> o ícone do relógio para um dos 9 botões do teclado virtual</li>
+            <li>O relógio começará a funcionar!</li>
+            <li>Use a área inferior para configurar (mudar cor, estilo, etc.)</li>
+            <li><strong>Clique com botão direito</strong> no botão para mais opções</li>
+        </ol>
+
+        <h2>🔧 Por que isso é necessário?</h2>
+        <p>Plugins HTML (como o Analog Clock) precisam que o navegador carregue o arquivo <code>app.html</code>, que atua como o "cérebro" do plugin. Esse arquivo:</p>
+        <ul>
+            <li>Se conecta ao servidor WebSocket</li>
+            <li>Processa eventos (adicionar, remover, configurar)</li>
+            <li>Atualiza os ícones no teclado virtual</li>
+            <li>Mantém comunicação com a interface de configuração</li>
+        </ul>
+
+        <h2>💡 Dicas</h2>
+        <ul>
+            <li><strong>F12</strong> abre o DevTools - útil para depuração</li>
+            <li>A área de log (esquerda) mostra todas as mensagens do sistema</li>
+            <li>Sempre deixe a aba do <code>app.html</code> aberta enquanto usa o plugin</li>
+            <li>Se o plugin parar de funcionar, recarregue a aba do <code>app.html</code></li>
+        </ul>
+
+        <hr style="margin: 30px 0;">
+
+        <p style="text-align: center;">
+            <a href="./GUIA_DE_USO.md" class="button secondary">📚 Ver Guia Completo</a>
+            <a href="./pagina.md" class="button secondary">📖 Documentação do SDK</a>
+        </p>
+
+        <p style="text-align: center; color: #6c757d; font-size: 14px;">
+            Simulador UlanziDeck | Versão 1.0<br>
+            <a href="https://github.com/UlanziTechnology/UlanziDeckPlugin-SDK" target="_blank">GitHub</a>
+        </p>
+    </div>
+</body>
+</html>
+

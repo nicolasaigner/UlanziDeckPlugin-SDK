@@ -41,14 +41,15 @@ class PluginMenu extends EventEmitter {
 
                 try{
 
-                  const languages = ['en', 'zh_CN', 'ja_JP', 'de_DE','zh_HK']
+                  // Carrega traduções - pt_BR tem prioridade (primeiro da lista)
+                  const languages = ['pt_BR', 'en', 'zh_CN', 'ja_JP', 'de_DE', 'zh_HK'];
                   languages.forEach(language => {
                     const data = this.getLocalization(filePath, language);
                     if(data) manifest[language+'_DATA'] = data;
                   })
                   
                 }catch(err){
-                  console.log('===get zh err',err)
+                  console.log('===erro ao carregar tradução:',err)
                 }
 
                 this.plugins[file] = manifest;
@@ -66,6 +67,7 @@ class PluginMenu extends EventEmitter {
     try{
       const trPath = path.join(filePath, language + '.json');
       const trData = fs.readFileSync(trPath, 'utf8');
+        // console.debug(`===get ${language} data: ${filePath}`);
       return JSON.parse(trData);
       
     }catch(err){ 

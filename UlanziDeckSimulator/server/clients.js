@@ -227,8 +227,9 @@ export default class Clients extends EventEmitter {
     let connectedMain = []
     for (const k in this.plugins) {
       const v = this.plugins[k]
-      const renderDate = this.config.language === 'zh_CN' && v.zhData ? v.zhData : v
-  
+      // Usa pt_BR_DATA se disponível, caso contrário usa o padrão
+      const renderDate = v[this.config.language + '_DATA'] || v
+
       if (this.clientList[v.UUID] && this.clientList[v.UUID].readyState == 1) { //Verifica se existe e se ainda está conectado
           if(!onlyCheck)this.log(renderDate.Name + ' Serviço principal '+ v.UUID +' conectado！')
           connectedMain.push(v)

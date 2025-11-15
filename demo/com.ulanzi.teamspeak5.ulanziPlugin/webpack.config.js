@@ -1,5 +1,3 @@
-
-
 import path from 'path';
 import TerserPlugin from 'terser-webpack-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
@@ -9,18 +7,18 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default {
   entry: './plugin/app.js',
-  target: 'node', // 目标环境为Node.js
+  target: 'node', // ambiente alvo: Node.js
   output: {
     filename: 'app.js',
     path: path.resolve(__dirname, 'dist'),
-    libraryTarget: 'module', // 设置输出格式为 ES 模块
-    chunkFormat: 'module' // 直接指定输出格式
+    libraryTarget: 'module', // define o formato de saída como módulo ES
+    chunkFormat: 'module' // define o formato dos chunks diretamente
   },
-  mode: 'development', // ‌生产模式（production）,开发模式（development）
+  mode: 'development', // modo: 'development' (desenvolvimento) ou 'production' (produção)
   module: {
     rules: [
       {
-        //特殊处理svgdom打包后的fonts路径
+        // tratamento especial do caminho das fontes geradas pelo svgdom após o empacotamento
         test: path.resolve(__dirname, 'node_modules/svgdom/src/utils/defaults.js'),
         use: [
           {
@@ -42,7 +40,7 @@ export default {
       },
       {
         test: /\.js$/,
-        // exclude: /node_modules/, // 如果你想包含node_modules内的JS文件，可以注释掉这一行
+        // exclude: /node_modules/, // Se você quiser incluir arquivos JS dentro de node_modules, pode comentar esta linha
         use: {
           loader: 'babel-loader',
           options: {
@@ -52,7 +50,7 @@ export default {
       },
     ],
   },
-  // 插件配置
+  // Configuração de plugins
   plugins: [
     new CopyWebpackPlugin({
       patterns: [
@@ -65,6 +63,6 @@ export default {
     minimizer: [new TerserPlugin()],
   },
   experiments: {
-      outputModule: true, // 启用模块输出
+      outputModule: true, // Habilita a saída de módulos
   }
 };

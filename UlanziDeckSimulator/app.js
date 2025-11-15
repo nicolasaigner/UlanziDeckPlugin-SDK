@@ -7,7 +7,7 @@ import DeckClient from './server/deckClient.js';
 import Clients from './server/clients.js';
 
 
-const serverPort = 39069 ; // porta do simulador
+const serverPort = 39069; // porta do simulador
 const app = express();
 const server = http.createServer(app);
 
@@ -21,7 +21,7 @@ const wsServer = new WebSocketServer({server:server});
 
 
 let clientConfig = {
-    "language": "zh_CN",
+    "language": "pt_BR",
     "loadAction": "no",
     "runMain": "no",
     serverPort,
@@ -65,5 +65,13 @@ wsServer.on('connection', (ws,msg) => {
 
 
 server.listen(serverPort,()=>{
-    console.log(`server started and run http://127.0.0.1:${serverPort}`);
+    console.log('\n╔════════════════════════════════════════════════════════════════════╗');
+    console.log('║  🎮 Simulador UlanziDeck iniciado com sucesso!                    ║');
+    console.log('╚════════════════════════════════════════════════════════════════════╝\n');
+    console.log(`📍 Acesse no navegador: http://127.0.0.1:${serverPort}`);
+    console.log(`📚 Página de ajuda:     http://127.0.0.1:${serverPort}/ajuda.html\n`);
+    console.log('💡 IMPORTANTE: Se aparecer "Por favor inicie o serviço principal primeiro",');
+    console.log('   abra esta URL em uma NOVA ABA do navegador:');
+    console.log(`   http://127.0.0.1:${serverPort}/com.ulanzi.analogclock.ulanziPlugin/plugin/app.html?address=127.0.0.1&port=${serverPort}&language=pt_BR&uuid=com.ulanzi.ulanzideck.analogclock\n`);
+    console.log('🛑 Para parar o servidor: Pressione Ctrl+C\n');
 });

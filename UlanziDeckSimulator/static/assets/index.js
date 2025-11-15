@@ -2,7 +2,7 @@ let ulanziLog = null; // nó de log
 let plugins = null; // lista de plugins
 let customMenu = null; // nó do menu personalizado
 let config = {
-  "language": "zh_CN",
+  "language": "pt_BR",
   "loadAction": "no",
   "runMain": "no",
   "rootPath": "",
@@ -17,10 +17,10 @@ let contextmenuKey = ''; // chave do menu de contexto
 
 const websocket = new WebSocket(`ws://127.0.0.1:${config.serverPort}/deckClient`)
 websocket.onopen = function (evt) {
-
+  console.log('WebSocket conectado ao simulador!');
 };
 websocket.onclose = function (evt) {
-
+  console.log('WebSocket desconectado');
 }
 
 websocket.onmessage = function (evt) {
@@ -280,6 +280,33 @@ document.addEventListener('DOMContentLoaded', function () {
     msg: 'Conectando ao simulador do computador host...',
   })
 
+  // Verificar se há plugins não conectados e mostrar ajuda automaticamente
+  setTimeout(() => {
+    const overlays = document.querySelectorAll('.slider-item-overlay');
+    let hasDisconnectedPlugins = false;
+
+    overlays.forEach(overlay => {
+      if (overlay.style.display !== 'none') {
+        hasDisconnectedPlugins = true;
+      }
+    });
+
+    // Se há plugins desconectados, mostrar ajuda automaticamente
+    if (hasDisconnectedPlugins) {
+      const hasSeenHelp = localStorage.getItem('ulanzi-deck-help-seen');
+      if (!hasSeenHelp) {
+        window.open('./ajuda.html', '_blank');
+        localStorage.setItem('ulanzi-deck-help-seen', 'true');
+      } else {
+        // Mostrar notificação no log
+        log({
+          time: time(),
+          msg: '⚠️ ATENÇÃO: Há plugins que precisam do serviço principal! Clique no botão verde "❓ Como iniciar o plugin" para ver as instruções, ou acesse: http://localhost:39069/ajuda.html',
+        });
+      }
+    }
+  }, 2000); // Aguarda 2 segundos após o carregamento
+
   ulanziLog.addEventListener('click', async function (event) {
     // Verifica se o alvo do clique é .code-box ou um de seus filhos
     const codeBox = event.target.closest('.code-box');
@@ -304,11 +331,14 @@ document.addEventListener('DOMContentLoaded', function () {
     'input',
     () => {
       const value = getFormValue(form);
+      console.log('===value',value);
       
       config = {
         ...config,
         ...value
       }
+
+      console.log('===config',config);
       send('config', { config })
       handleActiveCurrentKey()
     })

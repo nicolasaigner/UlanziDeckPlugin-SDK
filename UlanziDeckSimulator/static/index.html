@@ -9,12 +9,12 @@
 <body>
   <div class="wrapper">
     <div class="ulanzi-left" id="ulanzi-log">
-      <!-- <div class="log-item">
+       <div class="log-item">
         <p class="log-time">[2024/10/28 10:18:47]</p> <p>Plugins carregados com sucesso</p>
         <div class="fence-box code-box">
           <span> node.exe "app.js" "127.0.0.1" "3906" </span>
         </div>
-      </div> -->
+      </div>
       <div class="log-item">
         <p>Bem-vindo ao simulador de desenvolvimento Ulanzi Deck!</p>
       </div>
@@ -23,7 +23,7 @@
     <div class="ulanzi-window">
       <div class="ulanzi-slider" id="ulanzi-list">
         <!-- Exemplo de plugin -->
-        <!-- <div class="ulanzi-slider-item">
+         <div class="ulanzi-slider-item">
           <div class="slider-item-title">
 
             <div class="icon-name category-icon">
@@ -47,7 +47,7 @@
             </li>
           </ul>
 
-        </div> -->
+        </div>
 
       </div>
 
@@ -65,7 +65,7 @@
         </div>
         <div class="ulanzi-action">
           <div class="action-iframe">
-            <!-- <iframe src="./com.ulanzi.analogclock.ulanziPlugin/property-inspector/clock/inspector.html"></iframe> -->
+             <iframe src="./com.ulanzi.analogclock.ulanziPlugin/property-inspector/clock/inspector.html"></iframe>
           </div>
         </div>
       </div>
@@ -75,8 +75,9 @@
       <form class="ulanzi-form fence-box" id="ulanzi-config">
         <div>
           <label>Idioma:</label>
-          <label><input type="radio" name="language" value="zh_CN" checked />Chinês (Simplificado)</label>
-          <label><input type="radio" name="language" value="en" />Inglês</label>
+          <label><input type="radio" name="language" value="pt_BR" checked />Português Brasileiro</label>
+            <label><input type="radio" name="language" value="en" />Inglês</label>
+            <label><input type="radio" name="language" value="zh_CN" />Chinês (Simplificado)</label>
           <label><input type="radio" name="language" value="ja_JP" />Japonês</label>
           <label><input type="radio" name="language" value="de_DE" />Alemão</label>
           <label><input type="radio" name="language" value="zh_HK" />Chinês (Tradicional)</label>
@@ -86,14 +87,19 @@
           <label><input type="radio" name="loadAction" value="no" checked /><span>Não</span></label>
           <label><input type="radio" name="loadAction" value="yes"  /><span>Sim</span></label>
         </div>
-        <!-- <div>
+         <div>
           <label>Executar serviço principal:</label>
           <label><input type="radio" name="runMain" value="no" checked /><span>Não</span></label>
           <label><input type="radio" name="runMain" value="yes"  /><span>Sim</span></label>
-        </div> -->
+        </div>
         <br/>
         <div>
           <button type="button" onclick="refreshList()">Atualizar lista de plugins</button>
+        </div>
+        <div style="margin-top: 15px;">
+          <button type="button" onclick="window.open('./ajuda.html', '_blank')" style="background: #28a745; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
+            ❓ Como iniciar o plugin
+          </button>
         </div>
       </form>
 
