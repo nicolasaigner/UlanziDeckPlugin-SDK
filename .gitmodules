@@ -1,12 +1,6 @@
-[submodule "plugin-common-node"]
-	path = common-node
-	url = git@github.com:UlanziTechnology/plugin-common-node.git
 [submodule "plugin-common-html"]
-	path = common-html
-	url = git@github.com:UlanziTechnology/plugin-common-html.git
-[submodule "plugin-common-html-pt-br"]
-	path = plugin-common-html-pt-br
+	path = plugin-common-html
 	url = https://github.com/nicolasaigner/plugin-common-html
-[submodule "plugin-common-node-pt-br"]
-	path = plugin-common-node-pt-br
+[submodule "plugin-common-node"]
+	path = plugin-common-node
 	url = https://github.com/nicolasaigner/plugin-common-node
