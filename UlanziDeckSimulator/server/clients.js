@@ -22,10 +22,7 @@ export default class Clients extends EventEmitter {
       this.plugins = data;
       this.deckClient && this.deckClient.listUpdated(data)
       this.checkMainState()
-    })
-
-
-    
+    });
 
   }
 

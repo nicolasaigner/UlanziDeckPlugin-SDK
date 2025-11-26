@@ -1,0 +1,14 @@
+{
+  "Name": "Name",
+  "Face": "Face",
+  "Device ID": "Device ID",
+  "Personal Access Token": "Personal Access Token",
+  "Status": "Status",
+  "Connected": "Connected",
+  "Disconnected": "Disconnected",
+  "Connecting": "Connecting",
+  "Mute": "Mute",
+  "Unmute": "Unmute",
+  "Samsung Monitor Settings": "Samsung Monitor Settings"
+}
+

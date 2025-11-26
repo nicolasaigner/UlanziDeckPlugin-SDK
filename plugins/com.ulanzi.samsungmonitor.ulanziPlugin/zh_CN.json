@@ -1,0 +1,14 @@
+{
+  "Name": "名称",
+  "Face": "外观",
+  "Device ID": "设备ID",
+  "Personal Access Token": "个人访问令牌",
+  "Status": "状态",
+  "Connected": "已连接",
+  "Disconnected": "已断开",
+  "Connecting": "连接中",
+  "Mute": "静音",
+  "Unmute": "取消静音",
+  "Samsung Monitor Settings": "三星显示器设置"
+}
+

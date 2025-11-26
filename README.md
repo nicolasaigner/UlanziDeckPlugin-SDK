@@ -20,11 +20,31 @@ A biblioteca open source para desenvolvimento de plugins tem como objetivo ofere
    <strong><a href="https://github.com/UlanziTechnology/plugin-common-node">Biblioteca Node.js para desenvolvimento de plugins</a></strong>
 </p>
 
-## 2. Participar do desenvolvimento de plugins
+## 2. Plugins personalizados
+
+Este repositório inclui uma pasta `plugins/` para desenvolver seus próprios plugins personalizados.
+
+<p align="start">
+   <strong><a href="/plugins/README.md">📦 Acesse a pasta de plugins personalizados</a></strong>
+</p>
+
+### Workflow de desenvolvimento:
+
+1. **Desenvolva** seu plugin na pasta `plugins/`
+2. **Crie um link simbólico** para a pasta de plugins do UlanziDeck usando o script `create-symlink.ps1`
+3. **Edite** o código aqui - as alterações são refletidas automaticamente no UlanziDeck
+4. **Teste** diretamente no UlanziDeck
+
+### Scripts disponíveis:
+
+- `create-symlink.ps1` - Cria links simbólicos automaticamente
+- `list-symlinks.ps1` - Lista todos os links simbólicos ativos
+
+## 3. Participar do desenvolvimento de plugins
 
 Desenvolvedores interessados em contribuir para o desenvolvimento de plugins podem contatar **ustudioservice@ulanzi.com** para obter o protocolo e instruções de contribuição.
 
-## 3. Avisos e informações
+## 4. Avisos e informações
 
 - Período do programa de incentivos e validade deste documento: 2024/07/03 — 2024/12/31
 - Direitos de interpretação do projeto: A equipe [U‑Studio] detém os direitos de interpretação do projeto. Reservamo-nos o direito de decisão final sobre a direção do projeto, gestão do código, escolha de licença, etc.

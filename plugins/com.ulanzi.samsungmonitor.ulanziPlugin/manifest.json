@@ -1,0 +1,47 @@
+{
+  "Version": "1.0.0",
+  "Author": "Nicolas",
+  "Name": "Samsung Monitor Control",
+  "Description": "Controle o mute do seu Samsung Monitor M5 via SmartThings API",
+  "Icon": "assets/icons/icon.svg",
+  "UUID": "com.ulanzi.ulanzideck.samsungmonitor",
+  "Category": "Samsung Monitor",
+  "CategoryIcon": "assets/icons/categoryIcon.svg",
+  "CodePath": "dist/app.js",
+  "Type": "JavaScript",
+  "PrivateAPI": true,
+  "SupportedInMultiActions": false,
+  "Actions": [
+    {
+      "Name": "Mute/Unmute",
+      "Tooltip": "Alternar Mute do Monitor Samsung",
+      "Icon": "assets/actions/mute/icon_mute.svg",
+      "UUID": "com.ulanzi.ulanzideck.samsungmonitor.mute",
+      "PropertyInspectorPath": "property-inspector/mute/inspector.html",
+      "state": 0,
+      "States": [
+        {
+          "Image": "assets/actions/mute/unmuted.svg"
+        },
+        {
+          "Image": "assets/actions/mute/muted.svg"
+        }
+      ],
+      "SupportedInMultiActions": false
+    }
+  ],
+  "OS": [
+    {
+      "Platform": "mac",
+      "MinimumVersion": "10.11"
+    },
+    {
+      "Platform": "windows",
+      "MinimumVersion": "10"
+    }
+  ],
+  "Software": {
+    "MinimumVersion": "6.1"
+  }
+}
+
