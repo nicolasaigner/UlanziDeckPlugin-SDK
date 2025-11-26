@@ -4,3 +4,9 @@
 [submodule "plugin-common-html"]
 	path = common-html
 	url = git@github.com:UlanziTechnology/plugin-common-html.git
+[submodule "plugin-common-html-pt-br"]
+	path = plugin-common-html-pt-br
+	url = https://github.com/nicolasaigner/plugin-common-html
+[submodule "plugin-common-node-pt-br"]
+	path = plugin-common-node-pt-br
+	url = https://github.com/nicolasaigner/plugin-common-node
