@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Samsung Monitor - Configurações</title>
+  <link rel="stylesheet" href="../../libs/css/udpi.css">
+  <style>
+    body {
+      background-color: var(--udpi-bgcolor);
+      padding: 10px;
+    }
+
+    .status-indicator {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 5px;
+    }
+
+    .status-connected {
+      background-color: #4caf50;
+    }
+
+    .status-connecting {
+      background-color: #ff9800;
+    }
+
+    .status-disconnected {
+      background-color: #f44336;
+    }
+
+    .info-section {
+      background-color: rgba(255, 255, 255, 0.05);
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    details {
+      margin-bottom: 10px;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: bold;
+      margin-bottom: 10px;
+      user-select: none;
+    }
+
+    .help-text {
+      font-size: 11px;
+      color: #999;
+      margin-top: 5px;
+    }
+
+    .required {
+      color: #f44336;
+    }
+
+    #btnSaveConfig {
+      width: 100%;
+      padding: 10px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    #btnSaveConfig:hover {
+      background: #45a049;
+    }
+
+    #btnSaveConfig:active {
+      background: #3d8b40;
+    }
+
+    .info-box {
+      padding: 10px;
+      background: rgba(33, 150, 243, 0.1);
+      border-left: 3px solid #2196F3;
+      border-radius: 3px;
+      margin-top: 10px;
+      font-size: 12px;
+      color: #ddd;
+    }
+  </style>
+</head>
+<body>
+  <!-- Status de Conexão -->
+  <div class="info-section">
+    <div class="udpi-item">
+      <div class="udpi-item-label">Status</div>
+      <div class="udpi-item-value">
+        <span class="status-indicator status-disconnected" id="statusIndicator"></span>
+        <span id="statusText">Aguardando configuração...</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Configurações Globais -->
+  <div class="info-section">
+    <details open>
+      <summary>⚙️ Configurações do Plugin</summary>
+      <p class="help-text" style="margin-bottom: 10px;">
+        Configure suas credenciais do SmartThings. Estas configurações são salvas em arquivo e compartilhadas por todas as ações do plugin.
+      </p>
+
+      <form id="global-config">
+        <div class="udpi-item">
+          <div class="udpi-item-label">
+            Device ID <span class="required">*</span>
+          </div>
+          <input type="text"
+                 class="udpi-item-value"
+                 id="inputDeviceId"
+                 name="deviceId"
+                 placeholder="Ex: 5adfc20a-5821-753b-c496-c99fca7f802a">
+          <div class="help-text">
+            ID do seu dispositivo Samsung no SmartThings
+          </div>
+        </div>
+
+        <div class="udpi-item">
+          <div class="udpi-item-label">
+            Personal Access Token (PAT) <span class="required">*</span>
+          </div>
+          <input type="password"
+                 class="udpi-item-value"
+                 id="inputToken"
+                 name="token"
+                 placeholder="Ex: 02957901-efcc-4b5d-93b4-6b8ca34b586a">
+          <div class="help-text">
+            Token de acesso pessoal do SmartThings
+          </div>
+        </div>
+
+        <button type="button" id="btnSaveConfig">
+          💾 Salvar Configurações
+        </button>
+      </form>
+    </details>
+  </div>
+
+  <!-- Informações de Ajuda -->
+  <div class="info-box">
+    <strong>ℹ️ Como obter as credenciais:</strong><br>
+    <br>
+    <strong>Device ID:</strong><br>
+    1. Acesse <a href="https://my.smartthings.com/" target="_blank" style="color: #2196F3;">my.smartthings.com</a><br>
+    2. Selecione seu dispositivo<br>
+    3. Copie o ID da URL<br>
+    <br>
+    <strong>Token (PAT):</strong><br>
+    1. Acesse <a href="https://account.smartthings.com/tokens" target="_blank" style="color: #2196F3;">account.smartthings.com/tokens</a><br>
+    2. Clique em "Generate new token"<br>
+    3. Marque: devices:read, devices:write, devices:execute<br>
+    4. Copie o token gerado
+  </div>
+
+  <script src="../../libs/js/constants.js"></script>
+  <script src="../../libs/js/eventEmitter.js"></script>
+  <script src="../../libs/js/timers.js"></script>
+  <script src="../../libs/js/utils.js"></script>
+  <script src="../../libs/js/ulanzideckApi.js"></script>
+
+  <script>
+    console.log('========================================');
+    console.log('Samsung Monitor Inspector: Iniciando...');
+    console.log('$UD disponível?', typeof $UD !== 'undefined');
+    console.log('========================================');
+
+    // Verificar se $UD existe
+    if (typeof $UD === 'undefined') {
+      alert('ERRO: $UD não está definido! Bibliotecas não foram carregadas.');
+      console.error('ERRO CRÍTICO: $UD não está definido!');
+    }
+
+    // Conectar ao WebSocket
+    console.log('Tentando conectar ao WebSocket...');
+    $UD.connect('com.ulanzi.ulanzideck.samsungmonitor.mute');
+    console.log('Comando connect enviado');
+
+    const form = document.getElementById('global-config');
+    const statusIndicator = document.getElementById('statusIndicator');
+    const statusText = document.getElementById('statusText');
+    const btnSaveConfig = document.getElementById('btnSaveConfig');
+    const inputDeviceId = document.getElementById('inputDeviceId');
+    const inputToken = document.getElementById('inputToken');
+
+    console.log('Elementos HTML encontrados:', {
+      form: !!form,
+      statusIndicator: !!statusIndicator,
+      statusText: !!statusText,
+      btnSaveConfig: !!btnSaveConfig,
+      inputDeviceId: !!inputDeviceId,
+      inputToken: !!inputToken
+    });
+
+    let currentConfig = {
+      deviceId: '',
+      token: '',
+      connectState: 'disconnected'
+    };
+
+    let actionContext = null;
+
+    // Quando conectado
+    $UD.onConnected(conn => {
+      console.log('========================================');
+      console.log('Samsung Monitor Inspector: CONECTADO AO WEBSOCKET!');
+      console.log('Dados da conexão:', conn);
+      console.log('Context recebido:', conn.context);
+      console.log('========================================');
+      actionContext = conn.context;
+
+      if (!actionContext) {
+        console.error('⚠️ AVISO: Context está vazio após conexão!');
+        alert('AVISO: Context não foi recebido na conexão!');
+      }
+    });
+
+    // Quando a ação é adicionada
+    $UD.onAdd(message => {
+      console.log('========================================');
+      console.log('Samsung Monitor Inspector: EVENTO ADD RECEBIDO!');
+      console.log('Message completa:', message);
+      console.log('Context do message:', message.context);
+      console.log('========================================');
+
+      actionContext = message.context;
+
+      if (!actionContext) {
+        console.error('⚠️ ERRO: Context do ADD está vazio!');
+        alert('ERRO: Context do ADD está vazio!');
+      }
+
+      if (message.param) {
+        loadConfig(message.param);
+      }
+    });
+
+    // Receber parâmetros do app
+    $UD.onParamFromApp(message => {
+      console.log('========================================');
+      console.log('Samsung Monitor Inspector: EVENTO PARAM FROM APP!');
+      console.log('Message:', message);
+      console.log('Context:', message.context);
+      console.log('========================================');
+
+      actionContext = message.context;
+
+      if (message.param) {
+        loadConfig(message.param);
+      }
+    });
+
+    // Carregar configuração nos campos
+    function loadConfig(param) {
+      console.log('Carregando configuração:', param);
+
+      currentConfig = { ...currentConfig, ...param };
+
+      if (param.deviceId !== undefined) {
+        inputDeviceId.value = param.deviceId;
+      }
+
+      if (param.token !== undefined) {
+        inputToken.value = param.token;
+      }
+
+      if (param.connectState) {
+        updateStatus(param.connectState);
+      }
+    }
+
+    // Salvar configuração
+    btnSaveConfig.addEventListener('click', () => {
+      console.log('========================================');
+      console.log('🔘 BOTÃO SALVAR CLICADO!');
+      console.log('========================================');
+
+      console.log('Context atual:', actionContext);
+      console.log('$UD disponível?', typeof $UD !== 'undefined');
+      console.log('sendParamFromPlugin disponível?', typeof $UD.sendParamFromPlugin === 'function');
+
+      const deviceId = inputDeviceId.value.trim();
+      const token = inputToken.value.trim();
+
+      console.log('Valores dos campos:');
+      console.log('- Device ID:', deviceId);
+      console.log('- Token:', token ? '***' + token.substr(-4) : '(vazio)');
+
+      if (!deviceId || !token) {
+        alert('Por favor, preencha Device ID e Token!');
+        console.error('❌ Campos vazios!');
+        return;
+      }
+
+      const config = {
+        deviceId: deviceId,
+        token: token
+      };
+
+      console.log('Config para enviar:', {
+        deviceId: config.deviceId,
+        token: '***' + config.token.substr(-4)
+      });
+
+      // Enviar ao plugin - IMPORTANTE: Passar o context!
+      if (actionContext) {
+        console.log('✅ Context existe, enviando...');
+        console.log('Chamando: $UD.sendParamFromPlugin(config, context)');
+
+        try {
+          $UD.sendParamFromPlugin(config, actionContext);
+          console.log('✅ sendParamFromPlugin executado sem erro!');
+          console.log('Config enviada:', config);
+          console.log('Context usado:', actionContext);
+        } catch (error) {
+          console.error('❌ ERRO ao enviar:', error);
+          alert('ERRO ao enviar: ' + error.message);
+          return;
+        }
+
+        console.log('========================================');
+      } else {
+        console.error('❌ Context não encontrado!');
+        console.log('actionContext value:', actionContext);
+        alert('Erro: Context não encontrado. Tente fechar e reabrir o Property Inspector.');
+        return;
+      }
+
+      // Feedback visual
+      btnSaveConfig.textContent = '✅ Salvo!';
+      btnSaveConfig.style.background = '#4CAF50';
+
+      setTimeout(() => {
+        btnSaveConfig.textContent = '💾 Salvar Configurações';
+        btnSaveConfig.style.background = '#4CAF50';
+      }, 2000);
+    });
+
+    // Atualizar indicador de status
+    function updateStatus(state) {
+      console.log('Atualizando status para:', state);
+
+      statusIndicator.className = 'status-indicator';
+
+      if (state === 'connected') {
+        statusIndicator.classList.add('status-connected');
+        statusText.textContent = 'Conectado ao SmartThings';
+      } else if (state === 'connecting') {
+        statusIndicator.classList.add('status-connecting');
+        statusText.textContent = 'Conectando...';
+      } else {
+        statusIndicator.classList.add('status-disconnected');
+        statusText.textContent = 'Desconectado';
+      }
+    }
+
+    console.log('Samsung Monitor Inspector: Inicialização completa');
+  </script>
+</body>
+</html>
+

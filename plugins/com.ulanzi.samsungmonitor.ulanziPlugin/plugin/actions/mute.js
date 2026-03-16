@@ -1,17 +1,25 @@
 import logger from './logger.js';
+import configManager from './configManager.js';
 
 class MuteAction {
   constructor(context, $UD, $SmartThings) {
     this.context = context;
     this.$UD = $UD;
     this.$SmartThings = $SmartThings;
+
+    // Carregar configuração do arquivo
+    const config = configManager.getConfig();
     this.settings = {
-      deviceId: '<DEVICE_ID>',
-      token: '<PAT_TOKEN>',
+      deviceId: config.deviceId || '',
+      token: config.token || '',
       connectState: 'disconnected'
     };
 
     logger.log('MuteAction: Instância criada', this.context);
+    logger.log('MuteAction: Config carregada:', {
+      hasDeviceId: !!this.settings.deviceId,
+      hasToken: !!this.settings.token
+    });
 
     // Listener para mudanças no estado do mute
     this.muteStatusListener = (muted) => {

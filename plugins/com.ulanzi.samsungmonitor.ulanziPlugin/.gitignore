@@ -2,6 +2,7 @@ node_modules/
 dist/
 *.log
 plugin-debug.log
+config.json
 .DS_Store
 ws-port.js
 package-lock.json

@@ -2,12 +2,12 @@ import { UlanzideckApi } from './actions/plugin-common-node/index.js';
 import SmartThingsAPI from './actions/smartthings.js';
 import MuteAction from './actions/mute.js';
 import logger from './actions/logger.js';
+import configManager from './actions/configManager.js';
 
 logger.log('==============================================');
 logger.log('Samsung Monitor Plugin iniciando...');
 logger.log('Args:', process.argv);
 logger.log('==============================================');
-
 
 // Cache de instâncias de ações
 const ACTION_CACHES = {};
@@ -34,18 +34,24 @@ $UD.onClose(() => {
 // Inicializar API do SmartThings
 const $SmartThings = new SmartThingsAPI();
 
-logger.log('Configurando credenciais SmartThings...');
+logger.log('Carregando configuração...');
+const config = configManager.getConfig();
+logger.log('Config carregada:', {
+  hasDeviceId: !!config.deviceId,
+  hasToken: !!config.token,
+  isConfigured: config.isConfigured
+});
 
-// Configurar credenciais padrão
-$SmartThings.setCredentials(
-  '',
-  ''
-);
+// Configurar credenciais do arquivo de configuração
+if (config.isConfigured) {
+  logger.log('Configurando credenciais do arquivo de configuração...');
+  $SmartThings.setCredentials(config.deviceId, config.token);
 
-logger.log('Conectando ao SmartThings...');
-
-// Conectar ao SmartThings
-$SmartThings.connect();
+  logger.log('Conectando ao SmartThings...');
+  $SmartThings.connect();
+} else {
+  logger.warn('Credenciais não configuradas! Configure Device ID e Token no Property Inspector.');
+}
 
 // Eventos do SmartThings
 $SmartThings.on('connecting', () => {
@@ -151,6 +157,29 @@ $UD.onParamFromApp(jsn => {
 
   logger.log('Samsung Monitor Plugin: Parâmetros recebidos do app', { context, param: jsn.param });
 
+  // Verificar se são configurações globais (deviceId ou token)
+  if (jsn.param && (jsn.param.deviceId !== undefined || jsn.param.token !== undefined)) {
+    logger.log('Samsung Monitor Plugin: Atualizando configurações globais...');
+
+    if (jsn.param.deviceId !== undefined) {
+      configManager.setDeviceId(jsn.param.deviceId);
+      logger.log('Samsung Monitor Plugin: Device ID atualizado');
+    }
+
+    if (jsn.param.token !== undefined) {
+      configManager.setToken(jsn.param.token);
+      logger.log('Samsung Monitor Plugin: Token atualizado');
+    }
+
+    // Reconectar ao SmartThings com novas credenciais
+    const newConfig = configManager.getConfig();
+    if (newConfig.isConfigured) {
+      logger.log('Samsung Monitor Plugin: Reconectando ao SmartThings com novas credenciais...');
+      $SmartThings.setCredentials(newConfig.deviceId, newConfig.token);
+      $SmartThings.connect();
+    }
+  }
+
   if (instance) {
     if (typeof instance.receiveSettings === 'function') {
       instance.receiveSettings(jsn.param);
@@ -165,14 +194,59 @@ $UD.onParamFromPlugin(jsn => {
   const context = jsn.context;
   const instance = ACTION_CACHES[context];
 
-  logger.log('Samsung Monitor Plugin: Parâmetros recebidos do plugin', { context, param: jsn.param });
+  logger.log('Samsung Monitor Plugin: Parâmetros recebidos do plugin');
+  logger.log('Samsung Monitor Plugin: Context:', context);
+  logger.log('Samsung Monitor Plugin: Param:', JSON.stringify(jsn.param));
+
+  // Verificar se são configurações globais (deviceId ou token)
+  if (jsn.param && (jsn.param.deviceId !== undefined || jsn.param.token !== undefined)) {
+    logger.log('Samsung Monitor Plugin: ===== ATUALIZANDO CONFIGURAÇÕES GLOBAIS =====');
+    logger.log('Samsung Monitor Plugin: Device ID recebido:', jsn.param.deviceId);
+    logger.log('Samsung Monitor Plugin: Token recebido:', jsn.param.token ? '***' + jsn.param.token.substr(-4) : 'undefined');
+
+    if (jsn.param.deviceId !== undefined) {
+      configManager.setDeviceId(jsn.param.deviceId);
+      logger.log('Samsung Monitor Plugin: ✅ Device ID salvo no config.json');
+    }
+
+    if (jsn.param.token !== undefined) {
+      configManager.setToken(jsn.param.token);
+      logger.log('Samsung Monitor Plugin: ✅ Token salvo no config.json');
+    }
+
+    // Reconectar ao SmartThings com novas credenciais
+    const newConfig = configManager.getConfig();
+    logger.log('Samsung Monitor Plugin: Config após salvar:', {
+      hasDeviceId: !!newConfig.deviceId,
+      hasToken: !!newConfig.token,
+      isConfigured: newConfig.isConfigured
+    });
+
+    if (newConfig.isConfigured) {
+      logger.log('Samsung Monitor Plugin: 🔄 Reconectando ao SmartThings...');
+      $SmartThings.setCredentials(newConfig.deviceId, newConfig.token);
+      $SmartThings.connect();
+
+      // Atualizar TODAS as instâncias com a nova configuração
+      logger.log('Samsung Monitor Plugin: Atualizando todas as instâncias...');
+      for (let ctx in ACTION_CACHES) {
+        if (ACTION_CACHES[ctx].settings) {
+          ACTION_CACHES[ctx].settings.deviceId = newConfig.deviceId;
+          ACTION_CACHES[ctx].settings.token = newConfig.token;
+          logger.log('Samsung Monitor Plugin: Instância atualizada:', ctx);
+        }
+      }
+    } else {
+      logger.warn('Samsung Monitor Plugin: Configuração incompleta após salvar!');
+    }
+  }
 
   if (instance) {
     if (typeof instance.receiveSettings === 'function') {
       instance.receiveSettings(jsn.param);
     }
   } else {
-    logger.warn('Instância não encontrada para context:', context);
+    logger.log('Samsung Monitor Plugin: Nenhuma instância específica para este context');
   }
 });
 
